@@ -1,10 +1,10 @@
 package com.wingify.wingifyaudiobook
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), ArtistGenreAdapter.OnExpanded {
         val retryIcon: ImageView = findViewById(R.id.retry_icon)
         val progressBar : ProgressBar = findViewById(R.id.progress_bar)
         val shuffle: LinearLayout = findViewById(R.id.shuffle_list)
+        val filterIcon: ImageView = findViewById(R.id.filter_icon)
         setSupportActionBar(toolbar);
         artistGenreAdapter = ArtistGenreAdapter(this, dataMap, keyList, this)
         val recyclerView: RecyclerView = findViewById(R.id.artist_genre_recycler_view)
@@ -62,6 +63,52 @@ class MainActivity : AppCompatActivity(), ArtistGenreAdapter.OnExpanded {
             artistGenreAdapter.update(dataMap, keyList)
 
         }
+        filterIcon.setOnClickListener {
+            showAlert()
+
+        }
+    }
+
+    fun showAlert(){
+
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+        val alertLayout: View = layoutInflater.inflate(R.layout.alert_dialog, null)
+        alertDialogBuilder.setView(alertLayout)
+        val filterRadio: RadioGroup = alertLayout.findViewById(R.id.radio_group_filter)
+        val filterArtist: RadioButton = alertLayout.findViewById(R.id.radio_button_artist_name)
+        val filterGenre: RadioButton = alertLayout.findViewById(R.id.radio_button_genre_name)
+        if(keyName == "primaryGenreName"){
+            filterRadio.check(R.id.radio_button_genre_name)
+
+        }
+        else{
+            filterRadio.check(R.id.radio_button_artist_name)
+
+        }
+        alertDialogBuilder.setPositiveButton("Apply", object: DialogInterface.OnClickListener {
+            override fun onClick(p0: DialogInterface?, p1: Int) {
+                keyName = if (filterArtist.isChecked && !filterGenre.isChecked) {
+                    "artistName"
+
+                } else {
+                    "primaryGenreName"
+
+                }
+                dataMap = audioBooksViewModel.mapData(keyName)
+                keyList = dataMap.keys.toList() as ArrayList<String>
+                artistGenreAdapter.update(dataMap, keyList)
+            }
+        })
+        alertDialogBuilder.setNegativeButton("Cancel", object: DialogInterface.OnClickListener {
+            override fun onClick(p0: DialogInterface?, p1: Int) {
+
+            }
+
+        })
+        alertDialogBuilder.setCancelable(true)
+        val dialog: AlertDialog = alertDialogBuilder.create()
+        dialog.show()
+
     }
 
     override fun setOnExpandClick(position: Int) {
