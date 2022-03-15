@@ -24,31 +24,49 @@ class AudioBookViewModel(application: Application): AndroidViewModel(application
     fun fetchData() {
         val newsAPI = RetrofitHelper.getInstance().create(AudioBookInterface::class.java)
         GlobalScope.launch(Dispatchers.IO) {
-            val result = newsAPI.getAudioBookDetails()
-            if (result != null || result.body()!=null) {
-                val audioBooks = result.body()
-                if (audioBooks != null) {
-                    withContext(Dispatchers.Main) {
-                        books.value = audioBooks.results
-                        sharedPreferences.edit()
-                            .putString("localData", Gson().toJson(audioBooks)).commit()
-                    }
-                }
-                else{
-                    try {
-                        val temp = Gson().fromJson(sharedPreferences.getString("localData", ""), AudioBookDetails::class.java)
+            try {
+                val result = newsAPI.getAudioBookDetails()
+                if (result != null || result.body() != null) {
+                    val audioBooks = result.body()
+                    if (audioBooks != null) {
                         withContext(Dispatchers.Main) {
-                            if(temp != null) {
-                                books.value = temp.results
-                            }
+                            books.value = audioBooks.results
+                            sharedPreferences.edit()
+                                .putString("localData", Gson().toJson(audioBooks)).commit()
                         }
-                    }
-                    catch (e: Exception){
-                        Log.v("AudioBook", e.message.toString())
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            errorInAPIAccess()
+
+                        }
                     }
                 }
             }
+            catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    errorInAPIAccess()
+
+                }
+
+            }
+
         }
+
+    }
+
+    private fun errorInAPIAccess(){
+        try {
+            val temp = Gson().fromJson(
+                sharedPreferences.getString("localData", ""),
+                AudioBookDetails::class.java
+            )
+                if (temp != null) {
+                    books.value = temp.results
+                }
+        } catch (e: Exception) {
+            Log.v("AudioBook", e.message.toString())
+        }
+
 
     }
 

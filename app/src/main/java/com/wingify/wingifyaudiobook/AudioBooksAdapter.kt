@@ -7,15 +7,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
-class AudioBooksAdapter(private val context: Context) : RecyclerView.Adapter<AudioBooksAdapter.SongViewHolder>() {
-
-    var itemsData = emptyList<Any>()
+class AudioBooksAdapter(private val context: Context, private val itemsData: ArrayList<Result>) : RecyclerView.Adapter<AudioBooksAdapter.SongViewHolder>() {
 
     class SongViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var songName: TextView = itemView.findViewById(R.id.songName)
         var songImage: ImageView = itemView.findViewById(R.id.songImage)
-        var songDescription: ImageView = itemView.findViewById(R.id.songDescription)
+        var songDescription: TextView = itemView.findViewById(R.id.songDescription)
 
     }
 
@@ -25,17 +24,13 @@ class AudioBooksAdapter(private val context: Context) : RecyclerView.Adapter<Aud
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.songName.text = itemsData[position].trackName
+        holder.songDescription.text = itemsData[position].description
+        Glide.with(holder.songImage.context).load(itemsData[position].artworkUrl100).into(holder.songImage)
     }
 
     override fun getItemCount(): Int {
         return itemsData.size
     }
-
-    /*fun update(items: List<Article>){
-        itemsData.clear()
-        itemsData.addAll(items)
-        notifyDataSetChanged()
-    }*/
 
 }
