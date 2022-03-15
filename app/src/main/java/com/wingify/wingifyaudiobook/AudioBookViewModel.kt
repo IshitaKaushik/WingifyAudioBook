@@ -3,6 +3,7 @@ package com.wingify.wingifyaudiobook
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +31,20 @@ class AudioBookViewModel(application: Application): AndroidViewModel(application
                     withContext(Dispatchers.Main) {
                         books.value = audioBooks.results
                         sharedPreferences.edit()
-                            .putString("localData", Gson().toJson(audioBooks.results)).commit()
+                            .putString("localData", Gson().toJson(audioBooks)).commit()
+                    }
+                }
+                else{
+                    try {
+                        val temp = Gson().fromJson(sharedPreferences.getString("localData", ""), AudioBookDetails::class.java)
+                        withContext(Dispatchers.Main) {
+                            if(temp != null) {
+                                books.value = temp.results
+                            }
+                        }
+                    }
+                    catch (e: Exception){
+                        Log.v("AudioBook", e.message.toString())
                     }
                 }
             }
@@ -50,4 +64,6 @@ class AudioBookViewModel(application: Application): AndroidViewModel(application
         }
 
     }
+
+
 }
