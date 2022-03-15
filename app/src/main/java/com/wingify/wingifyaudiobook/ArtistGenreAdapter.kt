@@ -67,6 +67,7 @@ class ArtistGenreAdapter(private val context: Context, private val dataMap: Muta
         itemsData.addAll(items)
         dataMap.clear()
         dataMap.putAll(dataMaps)
+        currentItem=-1
         notifyDataSetChanged()
     }
 
