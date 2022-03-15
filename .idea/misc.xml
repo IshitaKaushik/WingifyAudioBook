@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/ishit/AndroidStudioProjects/WingifyAudioBook/app/src/main/res/layout/activity_main.xml" value="0.1125" />
+        <entry key="..\:/Users/ishit/AndroidStudioProjects/WingifyAudioBook/app/src/main/res/drawable/background_box.xml" value="0.198" />
+        <entry key="..\:/Users/ishit/AndroidStudioProjects/WingifyAudioBook/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/ishit/AndroidStudioProjects/WingifyAudioBook/app/src/main/res/layout/artist_genre_recyclerview_item.xml" value="0.1" />
+        <entry key="..\:/Users/ishit/AndroidStudioProjects/WingifyAudioBook/app/src/main/res/layout/audiobook_recyclerview_item.xml" value="0.1" />
         <entry key="..\:/Users/ishit/AndroidStudioProjects/WingifyAudioBook/app/src/main/res/layout/toolbar_main.xml" value="0.25416666666666665" />
       </map>
     </option>

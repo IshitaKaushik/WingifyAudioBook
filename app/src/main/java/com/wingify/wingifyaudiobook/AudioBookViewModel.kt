@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AudioBookViewModel(application: Application): AndroidViewModel(application) {
-    private val books: MutableLiveData<List<Result?>> = MutableLiveData<List<Result?>>()
+    val books: MutableLiveData<List<Result?>> = MutableLiveData<List<Result?>>()
     val booksLive: LiveData<List<Result?>>
     get() = books
     val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
@@ -48,21 +48,46 @@ class AudioBookViewModel(application: Application): AndroidViewModel(application
                     }
                 }
             }
-                else{
-                    try {
-                        books.value = listOf(
-                            Gson().fromJson(
-                                sharedPreferences.getString("localData", ""),
-                                Result::class.java
-                            )
-                        )
-                    }
-                    catch (e: Exception){
-                        books.value= emptyList()
-                    }
-                }
         }
 
+    }
+
+    fun mapData(keyName: String): MutableMap<String, ArrayList<Result>>{
+        val dataMap = mutableMapOf<String , ArrayList<Result>>()
+
+        for(item in books.value!!) {
+            if (keyName == "artistName") {
+                if (item != null) {
+                    if (dataMap.containsKey(item.artistName)) {
+                        val temp: ArrayList<Result>? = dataMap.get(item.artistName)
+                        if (temp != null) {
+                            temp.add(item)
+                            dataMap[item.artistName] = temp
+                        }
+                    } else {
+                        val temp = ArrayList<Result>()
+                        temp.add(item)
+                        dataMap[item.artistName] = temp
+                    }
+                }
+            } else {
+                if (item != null) {
+                    if (dataMap.containsKey(item.primaryGenreName)) {
+                        val temp: ArrayList<Result>? = dataMap.get(item.primaryGenreName)
+                        if (temp != null) {
+                            temp.add(item)
+                            dataMap[item.primaryGenreName] = temp
+                        }
+                    } else {
+                        val temp = ArrayList<Result>()
+                        temp.add(item)
+                        dataMap[item.primaryGenreName] = temp
+                    }
+                }
+            }
+        }
+
+        return dataMap
     }
 
 
