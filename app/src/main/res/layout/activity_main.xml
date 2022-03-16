@@ -13,7 +13,6 @@
         android:id="@+id/shuffle_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/artist_genre_recycler_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
@@ -37,6 +36,41 @@
 
     </LinearLayout>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/shuffle_list">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+
+
+
+    </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/artist_genre_recycler_view"
         android:layout_width="match_parent"
@@ -44,6 +78,7 @@
         app:layout_constraintTop_toBottomOf="@id/shuffle_list"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@android:color/white"
+        android:visibility="gone"
         tools:listitem="@layout/artist_genre_recyclerview_item" />
 
     <ProgressBar

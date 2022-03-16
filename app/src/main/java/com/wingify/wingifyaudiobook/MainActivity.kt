@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 
 class MainActivity : AppCompatActivity(), ArtistGenreAdapter.OnExpanded {
 
@@ -28,20 +29,26 @@ class MainActivity : AppCompatActivity(), ArtistGenreAdapter.OnExpanded {
         val progressBar : ProgressBar = findViewById(R.id.progress_bar)
         val shuffle: LinearLayout = findViewById(R.id.shuffle_list)
         val filterIcon: ImageView = findViewById(R.id.filter_icon)
+        val shimmerFrameLayout: ShimmerFrameLayout = findViewById(R.id.shimmer_layout)
         setSupportActionBar(toolbar);
         artistGenreAdapter = ArtistGenreAdapter(this, dataMap, keyList, this)
         val recyclerView: RecyclerView = findViewById(R.id.artist_genre_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = artistGenreAdapter
         audioBooksViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))[AudioBookViewModel:: class.java]
-        progressBar.visibility = View.VISIBLE
-        shuffle.visibility = View.GONE
+        //progressBar.visibility = View.VISIBLE
+        //shuffle.visibility = View.GONE
+        shimmerFrameLayout.visibility = View.VISIBLE
+        shimmerFrameLayout.startShimmerAnimation()
+        recyclerView.visibility = View.GONE
         audioBooksViewModel.fetchData()
         audioBooksViewModel.booksLive.observe(this, object: Observer<List<Result?>> {
             override fun onChanged(t: List<Result?>) {
-                progressBar.visibility = View.GONE
+                //progressBar.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
-                shuffle.visibility = View.VISIBLE
+                //shuffle.visibility = View.VISIBLE
+                shimmerFrameLayout.visibility = View.GONE
+                shimmerFrameLayout.stopShimmerAnimation()
                 if(t.isNotEmpty() && t!=null) {
                     dataMap = audioBooksViewModel.mapData(keyName)
                     keyList = dataMap.keys.toList() as ArrayList<String>
@@ -52,9 +59,11 @@ class MainActivity : AppCompatActivity(), ArtistGenreAdapter.OnExpanded {
             }
         })
         retryIcon.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
+            //progressBar.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
-            shuffle.visibility = View.GONE
+            //shuffle.visibility = View.GONE
+            shimmerFrameLayout.visibility = View.VISIBLE
+            shimmerFrameLayout.startShimmerAnimation()
             audioBooksViewModel.fetchData()
 
         }
@@ -69,7 +78,7 @@ class MainActivity : AppCompatActivity(), ArtistGenreAdapter.OnExpanded {
         }
     }
 
-    fun showAlert(){
+    private fun showAlert(){
 
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
         val alertLayout: View = layoutInflater.inflate(R.layout.alert_dialog, null)
